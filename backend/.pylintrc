@@ -1,0 +1,85 @@
+[MASTER]
+# 指定 Python 版本
+py-version = 3.13
+
+# 分析器并行运行的进程数
+jobs = 0
+
+# 要忽略的文件或目录
+ignore=CVS,.git,__pycache__,venv,env
+
+init-hook='import sys; sys.path.extend(["/Users/zhanglun/Documents/mine/HelixNest/backend", "/Users/zhanglun/Documents/mine/HelixNest/backend/.venv/lib/python3.13/site-packages"])'
+
+[MESSAGES CONTROL]
+# 禁用一些不必要的警告
+disable=
+    C0111,  # missing-docstring
+    C0114,  # missing-module-docstring
+    C0103,  # invalid-name
+    C0303,  # trailing-whitespace
+    W0621,  # redefined-outer-name
+    R0903,  # too-few-public-methods
+    R0913,  # too-many-arguments
+    C0326,  # bad-whitespace
+    C0330,  # bad-continuation
+    W0311,  # bad-indentation
+    W0312   # mixed-indentation
+
+[FORMAT]
+# 设置缩进为 2 个空格
+indent-after-paren=2
+indent-string='  '
+
+[INDENTATION]
+# 设置基础缩进为 2 个空格
+indent-after-paren=2
+indent-string='  '
+use-tabs=no
+indent-size=2
+
+[BASIC]
+# 设置缩进检查标准为 2 个空格
+good-names=i,j,k,ex,Run,_,id,db
+indent-size=2
+
+# 变量名规则
+variable-naming-style=snake_case
+
+# 函数名规则
+function-naming-style=snake_case
+
+# 参数名规则
+argument-naming-style=snake_case
+
+[DESIGN]
+# 最大参数数量
+max-args=6
+
+# 最大局部变量数量
+max-locals=15
+
+# 最大返回值数量
+max-returns=6
+
+# 最大分支数量
+max-branches=12
+
+[SIMILARITIES]
+# 最小相似行数
+min-similarity-lines=4
+
+# 忽略导入语句
+ignore-imports=yes
+
+[TYPECHECK]
+# 需要生成 members 的模块
+generated-members=REQUEST,acl_users,aq_parent,objects,DoesNotExist,id,pk,flask.*
+
+[IMPORTS]
+# 应该放在第三方导入之前的模块
+known-first-party=app
+
+[LOGGING]
+# 日志记录格式检查
+logging-format-style=new
+

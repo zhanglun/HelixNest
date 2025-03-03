@@ -1,0 +1,13 @@
+{
+  "python.defaultInterpreterPath": "/Users/zhanglun/Documents/mine/HelixNest/backend/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "/Users/zhanglun/Documents/mine/HelixNest/backend",
+    "/Users/zhanglun/Documents/mine/HelixNest/backend/.venv/lib/python3.13/site-packages"
+  ],
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintPath": "/Users/zhanglun/Documents/mine/HelixNest/backend/.venv/bin/pylint",
+  "editor.tabSize": 2,
+  "python.formatting.autopep8Args": ["--indent-size=2"],
+  "python.linting.pylintArgs": ["--indent-string='  '"]
+}
