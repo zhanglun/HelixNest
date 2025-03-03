@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+      CELERY_RESULT_BACKEND: "redis://redis:6379/1"
+      SESSION_TYPE: "redis"
+      SESSION_REDIS: "redis://redis:6379/2"
+      FLASK_APP: "app:create_app"
+    depends_on:
+      - redis:
+          condition: service_healthy
+      - celery_worker  # 如需独立Celery服务可添加
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+
+volumes:
+  redis_data:

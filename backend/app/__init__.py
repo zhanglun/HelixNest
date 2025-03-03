@@ -33,7 +33,7 @@ def register_logging(app):
 
 def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
-  app.config.from_file("config.dev.toml", load=tomllib.load, text=False)
+  app.config.from_pyfile('config.dev.py')  # 替换原来的 from_file
 
   try:
     os.makedirs(app.instance_path)
