@@ -13,7 +13,6 @@ services:
       FLASK_APP: "app:create_app"
     depends_on:
       - redis
-      - celery_worker  # 如需独立Celery服务可添加
 
   redis:
     image: redis:7-alpine
