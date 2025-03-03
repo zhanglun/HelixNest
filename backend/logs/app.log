@@ -61,3 +61,34 @@ information about how to avoid this problem.
 This typically means that you attempted to use functionality that needed
 an active HTTP request. Consult the documentation on testing for
 information about how to avoid this problem.
+2025-03-03 17:15:54,827 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:15:54,827 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:15:54,877 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:15:54,877 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:22:02,638 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:22:02,638 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:22:02,706 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:22:02,706 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:23:42,504 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:23:42,504 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:24:43,175 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:24:43,175 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:25:17,057 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:25:38,887 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:27:12,041 - app - auth - INFO - Login attempt for username: admin

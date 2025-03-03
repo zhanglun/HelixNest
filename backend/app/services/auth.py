@@ -86,10 +86,34 @@ def login_user(username, password):
     current_app.logger.error(f"Login error: {str(e)}")
     return jsonify({
       "status": "error",
-      "message": "Internal server error"
+      "message": "Internal server error3333"
     }), 500
 
 def logout():
   """安全登出"""
   session.clear()  # 服务端立即销毁Session
   return jsonify({"status": "Logged out"})
+
+
+def get_login_user():
+    """Get current logged in user's complete information"""
+    if not session.get('user_id'):
+        return None
+
+    # Get MongoDB client
+    mongo_client = current_app.extensions["mongo"]
+    db = mongo_client[current_app.config["MONGO_DATABASE_NAME"]]
+
+    # Find user by username
+    user = db.users.find_one({"username": session.get('user_id')})
+
+    if user:
+        # Remove sensitive information
+        if 'password' in user:
+            del user['password']
+        if 'salt' in user:
+            del user['salt']
+
+        return user
+
+    return None

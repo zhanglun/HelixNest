@@ -36,9 +36,9 @@ def create_app(test_confg=None) -> Flask:
   app.config.from_file("config.dev.toml", load=tomllib.load, text=False)
 
   try:
-      os.makedirs(app.instance_path)
+    os.makedirs(app.instance_path)
   except OSError:
-      pass
+    pass
 
   register_blueprint(app)
   register_logging(app)
@@ -48,10 +48,7 @@ def create_app(test_confg=None) -> Flask:
     _init_extensions(app)
 
   celery_init_app(app)
-
-
   return app
-
 
 def _init_extensions(app):
   extensions.init_mongo(app)
