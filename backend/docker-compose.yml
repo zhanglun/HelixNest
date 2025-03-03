@@ -12,8 +12,7 @@ services:
       SESSION_REDIS: "redis://redis:6379/2"
       FLASK_APP: "app:create_app"
     depends_on:
-      - redis:
-          condition: service_healthy
+      - redis
       - celery_worker  # 如需独立Celery服务可添加
 
   redis:
