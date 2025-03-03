@@ -1,4 +1,6 @@
 from celery import Celery
+from redis import Redis
+from flask_session import Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -45,6 +47,14 @@ class Extensions:
       app.extensions["mongo"] = self.mongo
     except Exception as e:
       print(e)
+
+  def init_session(self, app):
+    if not app.config.get("SESSION_REDIS"):
+      raise ValueError("SESSION_REDIS未配置")
+
+    app.config["SESSION_REDIS"] = Redis.from_url(app.config.get("SESSION_REDIS"))
+
+    Session(app)
 
 # 单例模式全局访问
 extensions = Extensions()
