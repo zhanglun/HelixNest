@@ -36,10 +36,7 @@ def create_app(test_config=None) -> Flask:
   except OSError:
       pass
 
-  from app.blueprint.compound import compound_bp
-
-  app.register_blueprint(compound_bp)
-
+  register_blueprint(app)
   register_logging(app)
 
   # 按需初始化扩展
@@ -54,3 +51,10 @@ def create_app(test_config=None) -> Flask:
 def _init_extensions(app):
   extensions.init_celery(app)
   extensions.init_mongo(app)
+
+def register_blueprint(app):
+  from app.blueprint.api import api_bp
+  from app.blueprint.views import views_bp
+
+  app.register_blueprint(views_bp)
+  app.register_blueprint(api_bp)
