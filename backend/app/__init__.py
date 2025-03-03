@@ -31,7 +31,7 @@ def register_logging(app):
   if not app.debug:
     app.logger.addHandler(file_handler)
 
-def create_app() -> Flask:
+def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
   app.config.from_file("config.dev.toml", load=tomllib.load, text=False)
 

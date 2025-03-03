@@ -21,3 +21,43 @@
 2025-02-27 18:00:53,399 - app - compound - ERROR - MongoDB operation failed: 'mongo'
 2025-02-27 18:06:54,261 - app - compound - ERROR - MongoDB operation failed: 'mongo'
 2025-02-27 18:07:55,374 - app - compound - ERROR - MongoDB operation failed: 'mongo'
+2025-03-03 17:09:17,918 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:09:17,918 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:09:34,887 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:09:34,887 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:11:59,447 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:11:59,447 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:14,478 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:14,478 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:43,292 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:43,292 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:50,708 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:12:50,708 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:00,247 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:00,247 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:08,353 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:08,353 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:46,949 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:46,949 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:13:47,013 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:13:47,013 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:14:06,920 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:14:06,920 - app - auth - INFO - Login attempt for username: admin
+2025-03-03 17:14:06,964 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+2025-03-03 17:14:06,964 - app - auth - ERROR - Login error: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
