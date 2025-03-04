@@ -1,6 +1,5 @@
 FROM python:3.12-slim
 
-RUN useradd --create-home appuser
 WORKDIR /app
 COPY requirements.txt .
 
@@ -11,5 +10,4 @@ COPY start.sh .
 RUN chmod +x start.sh
 
 COPY . .
-USER appuser
 ENTRYPOINT ["./start.sh"]
