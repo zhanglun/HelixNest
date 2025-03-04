@@ -33,7 +33,10 @@ def register_logging(app):
 
 def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
-  app.config.from_pyfile('config.dev.py')  # 替换原来的 from_file
+  if os.getenv("FLASK_ENV") == "production":
+    app.config.from_pyfile('config.prod.py')
+  else:
+    app.config.from_pyfile('config.dev.py')  # 替换原来的 from_file
 
   try:
     os.makedirs(app.instance_path)
@@ -48,6 +51,7 @@ def create_app(test_confg=None) -> Flask:
     _init_extensions(app)
 
   celery_init_app(app)
+
   return app
 
 def _init_extensions(app):
