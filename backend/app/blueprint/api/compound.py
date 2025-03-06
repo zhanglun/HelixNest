@@ -6,7 +6,7 @@ import app.services.pubchem_client as pubchem_client
 from app.tasks.compound_tasks import add_together
 from app.tasks.compound_tasks import chem_analysis
 
-compound_bp = Blueprint("compound", __name__, url_prefix="/compound")
+compound_bp = Blueprint("compound", __name__, url_prefix="/compounds")
 
 @compound_bp.route("/query", methods=["GET"])
 def fetch():

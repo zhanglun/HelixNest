@@ -1,8 +1,8 @@
 import os
-import tomllib
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask
+from flask_cors import CORS
 from flask_session import Session
 from .celery_config import celery_init_app
 from .extensions import extensions
@@ -33,6 +33,9 @@ def register_logging(app):
 
 def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
+
+  CORS(app, resources=r'/api/*')
+
   if os.getenv("FLASK_ENV") == "production":
     app.config.from_pyfile('config.prod.py')
   else:
