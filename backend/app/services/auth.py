@@ -28,10 +28,10 @@ def login_user(username, password):
   """
 
   if not all([username, password]):
-    return jsonify({
+    return {
       "status": "error",
       "message": "Missing username or password"
-    }), 400
+    }, 400
 
   current_app.logger.info(f"Login attempt for username: {username}")
 
@@ -43,7 +43,7 @@ def login_user(username, password):
   user = db.users.find_one({"username": username})
 
   if not user:
-    return jsonify({"error": "Invalid credentials"}), 401
+    return {"error": "Invalid credentials"}, 401
 
   # # 验证密码（带盐值哈希）
   # input_hash = hashlib.sha256(
@@ -61,6 +61,9 @@ def login_user(username, password):
   # if not check_password_hash(user["password"], password):
   #   return jsonify({"error": "Invalid password"}), 401
 
+  if not user["password"] == password:
+    return {"error": "Invalid password"}, 401
+
   # 通过所有验证后创建新会话
   try:
     # 防御会话固定攻击：重置会话ID
@@ -76,23 +79,23 @@ def login_user(username, password):
       request.headers.get('User-Agent', '').encode()
     ).hexdigest()  # 客户端指纹
 
-    return jsonify({
+    return {
       "status": "success",
       "message": "Login successful",
       "user": username
-    }), 200
+    }, 200
   except Exception as e:
     # 记录异常日志
     current_app.logger.error(f"Login error: {str(e)}")
-    return jsonify({
+    return {
       "status": "error",
       "message": "Internal server error3333"
-    }), 500
+    }, 500
 
 def logout():
   """安全登出"""
   session.clear()  # 服务端立即销毁Session
-  return jsonify({"status": "Logged out"})
+  return {"status": "Logged out"}
 
 
 def get_login_user():
