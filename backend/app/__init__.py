@@ -4,7 +4,9 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, current_app
 from werkzeug.exceptions import HTTPException
 from flask_cors import CORS
-from flask_session import Session
+from flask.json.provider import DefaultJSONProvider
+from bson import ObjectId
+from datetime import datetime
 from .celery_config import celery_init_app
 from .extensions import extensions
 from .utils.api_response import APIResponse
@@ -15,6 +17,16 @@ from app.blueprint.views import views_bp
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 print(basedir)
+
+class MongoJSONProvider(DefaultJSONProvider):
+  def default(self, obj):
+    if isinstance(obj, ObjectId):
+      return str(obj)
+
+    if isinstance(obj, datetime):
+      return obj.isoformat()
+
+    return super().default(obj)
 
 def register_logging(app):
   app.logger.setLevel(logging.INFO)
@@ -36,6 +48,9 @@ def register_logging(app):
 
 def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
+
+  app.json_provider_class = MongoJSONProvider
+  app.json = MongoJSONProvider(app)
 
   @app.errorhandler(Exception)
   def handle_domain_exception(e: Exception):
