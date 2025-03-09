@@ -29,6 +29,8 @@ def login():
   session['user_id'] = str(user["_id"])
   session['logged_in'] = True
 
+  print('asdfasdfs===>', session.get("user_id"))
+
   return APIResponse.success(
     data=user,
     message="登录成功"
@@ -38,8 +40,8 @@ def login():
 
 @auth_bp.route('/current_user', methods=["GET"])
 def current_user():
-  print("session ===>", session)
   user_id = session.get("user_id")
+  print("session ===>", user_id)
   return APIResponse.success(
     data={
       "username": session.get('user_id')

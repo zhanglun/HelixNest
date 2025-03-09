@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { addToast, Button } from "@heroui/react";
 import { request } from "@/helpers/request";
 
-export default function IndexPage() {
+export default function LoginPage() {
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("admin");
 
