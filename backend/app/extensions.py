@@ -1,8 +1,10 @@
 from celery import Celery
 from redis import Redis
+from flask import g
 from flask_session import Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from .utils.api_response import generate_request_id
 
 class Extensions:
   """集中管理所有第三方扩展"""
@@ -55,6 +57,12 @@ class Extensions:
     app.config["SESSION_REDIS"] = Redis.from_url(app.config.get("SESSION_REDIS"))
 
     Session(app)
+
+  def register_request_hooks(self, app):
+    @app.before_request
+    def set_request_context():
+        """每个请求前生成唯一ID"""
+        g.request_id = generate_request_id()
 
 # 单例模式全局访问
 extensions = Extensions()

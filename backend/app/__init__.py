@@ -58,6 +58,7 @@ def create_app(test_confg=None) -> Flask:
   return app
 
 def _init_extensions(app):
+  extensions.register_request_hooks(app)
   extensions.init_mongo(app)
   extensions.init_session(app)
   extensions.init_celery(app)
