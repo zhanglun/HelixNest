@@ -5,7 +5,7 @@ from app.utils.api_response import format_response, APIResponse
 auth_bp = Blueprint("auth", __name__, url_prefix="/")
 
 @auth_bp.route('/login', methods=["POST"])
-@format_response
+# @format_response
 def login():
   data = request.get_json()
 
@@ -26,11 +26,11 @@ def login():
 
   # 设置Session
   session.permanent = True  # 使会话持久化
-  session['user_id'] = user["_id"]
+  session['user_id'] = user["id"]
   session['logged_in'] = True
 
   return APIResponse.success(
-    data={user},
+    data=user,
     message="登录成功"
   )
 

@@ -25,7 +25,7 @@ class APIResponse:
       "meta": meta
     }), http_status  # 保持与HTTP状态码一致
 
-  @staticmethod
+  @classmethod
   def success(cls, data=None, message=None, biz_code=BizCode.SUCCESS):
     """成功响应快捷方法"""
     return cls.generate(
@@ -49,12 +49,11 @@ def format_response(func):
   def wrapper(*args, **kwargs):
     # 执行视图逻辑
     result = func(*args, **kwargs)
-    logging.error(result)
 
     # 自动识别返回类型
     if isinstance(result, tuple):
       data, code, headers = result + (None, None, None)[len(result):]
-      return APIResponse.success(data=data, code=code), code, headers
+      return APIResponse.success(data=data), code, headers
     elif isinstance(result, dict):
       return APIResponse.success(data=result)
     else:

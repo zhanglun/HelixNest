@@ -1,4 +1,5 @@
 import hashlib
+import json
 from flask import current_app, request, jsonify, session
 # from werkzeug.security import check_password_hash
 from datetime import datetime
@@ -59,10 +60,9 @@ def login_user(username, password):
   if not user["password"] == password:
     raise InvalidCredentialsError()
 
-  # user["id"] = str(user["_id"])
-
   del user["password"]
-  # del user["_id"]
+  user["id"] = str(user["_id"])
+  del user["_id"]
 
   return user
 
