@@ -75,3 +75,12 @@ def fetch_compound(cid: str) -> dict:
   except RequestException as e:
     print(f"PubChem请求失败: {str(e)}")
     return None
+
+
+def list_compounds() -> list:
+  mongo_client = current_app.extensions["mongo"]
+  db = mongo_client[current_app.config["MONGO_DATABASE_NAME"]]
+
+  compounds = db.compounds.find()
+
+  return list(compounds)

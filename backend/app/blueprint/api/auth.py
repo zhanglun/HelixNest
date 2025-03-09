@@ -26,7 +26,7 @@ def login():
 
   # 设置Session
   session.permanent = True  # 使会话持久化
-  session['user_id'] = user["id"]
+  session['user_id'] = str(user["_id"])
   session['logged_in'] = True
 
   return APIResponse.success(
@@ -34,3 +34,14 @@ def login():
     message="登录成功"
   )
 
+
+
+@auth_bp.route('/current_user', methods=["GET"])
+def current_user():
+  print("session ===>", session)
+  user_id = session.get("user_id")
+  return APIResponse.success(
+    data={
+      "username": session.get('user_id')
+    }
+  )

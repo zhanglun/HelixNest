@@ -3,10 +3,19 @@ from flask import Blueprint, request, jsonify, current_app
 from celery.result import AsyncResult
 
 import app.services.pubchem_client as pubchem_client
+from app.utils.api_response import APIResponse
 from app.tasks.compound_tasks import add_together
 from app.tasks.compound_tasks import chem_analysis
 
 compound_bp = Blueprint("compound", __name__, url_prefix="/compounds")
+
+@compound_bp.route("", methods=["GET"])
+def list():
+  list = pubchem_client.list_compounds()
+
+  print(list)
+
+  return APIResponse.success(data={"compounds": list})
 
 @compound_bp.route("/query", methods=["GET"])
 def fetch():

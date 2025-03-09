@@ -7,7 +7,7 @@ class CompoundModel:
     print(current_app.extensions)
     # 通过 current_app 动态获取连接
     db = current_app.extensions["mongo"][current_app.config["MONGO_DATABASE_NAME"]]
-    return db["compound"]
+    return db["compounds"]
 
   def save_compound(self, data):
     """线程安全的原子操作"""

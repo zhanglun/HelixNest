@@ -1,8 +1,5 @@
-import hashlib
-import json
 from flask import current_app, request, jsonify, session
 # from werkzeug.security import check_password_hash
-from datetime import datetime
 from app.utils.exceptions import InvalidCredentialsError, UserNotActiveError
 
 def const_time_compare(a, b):
@@ -61,8 +58,6 @@ def login_user(username, password):
     raise InvalidCredentialsError()
 
   del user["password"]
-  user["id"] = str(user["_id"])
-  del user["_id"]
 
   return user
 
