@@ -8,11 +8,17 @@ export default function IndexPage() {
   const [password, setPassword] = useState("admin");
 
   function login() {
-    request.post("/login", { username, password }).then((res) => {
-      console.log(res);
+    request.post("/login", { username, password }).then(({ data }) => {
+      console.log(data);
 
-      addToast("Login successful");
-      // window.location.href = "/";
+      if (data.biz_code === 20000) {
+        addToast({
+          title: "Login successful",
+        });
+
+        window.location.href = "/";
+      }
+
     });
   }
 
