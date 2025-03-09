@@ -56,6 +56,8 @@ class Extensions:
 
     app.config["SESSION_REDIS"] = Redis.from_url(app.config.get("SESSION_REDIS"))
 
+    print(app.config['SESSION_REDIS'].ping())
+
     Session(app)
 
   def register_request_hooks(self, app):

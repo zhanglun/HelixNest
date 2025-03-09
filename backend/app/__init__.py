@@ -81,7 +81,7 @@ def create_app(test_confg=None) -> Flask:
       message=message
     )
 
-  CORS(app, resources=r'/api/*', supports_credentials=True)
+  CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
   if os.getenv("FLASK_ENV") == "production":
     app.config.from_pyfile('config.prod.py')
