@@ -1,6 +1,6 @@
 import { Input } from "@heroui/input";
 import { useEffect, useState } from "react";
-import { Button } from "@heroui/button";
+import { addToast, Button } from "@heroui/react";
 import { request } from "@/helpers/request";
 
 export default function IndexPage() {
@@ -10,7 +10,9 @@ export default function IndexPage() {
   function login() {
     request.post("/login", { username, password }).then((res) => {
       console.log(res);
-      window.location.href = "/";
+
+      addToast("Login successful");
+      // window.location.href = "/";
     });
   }
 
