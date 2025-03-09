@@ -2,6 +2,7 @@ import hashlib
 from flask import current_app, request, jsonify, session
 # from werkzeug.security import check_password_hash
 from datetime import datetime
+from app.utils.exceptions import InvalidCredentialsError, UserNotActiveError
 
 def const_time_compare(a, b):
   """恒定时间比较防止时序攻击"""
@@ -27,23 +28,17 @@ def login_user(username, password):
       - HTTP status code (200 for success, 401/404 for errors)
   """
 
-  if not all([username, password]):
-    return {
-      "status": "error",
-      "message": "Missing username or password"
-    }, 400
-
-  current_app.logger.info(f"Login attempt for username: {username}")
-
   # Get MongoDB client
   mongo_client = current_app.extensions["mongo"]
   db = mongo_client[current_app.config["MONGO_DATABASE_NAME"]]
 
   # Find user by username
-  user = db.users.find_one({"username": username})
+  user = db.users.find_one(
+    {"username": username},
+  )
 
   if not user:
-    return {"error": "Invalid credentials"}, 401
+    raise InvalidCredentialsError()
 
   # # 验证密码（带盐值哈希）
   # input_hash = hashlib.sha256(
@@ -62,35 +57,14 @@ def login_user(username, password):
   #   return jsonify({"error": "Invalid password"}), 401
 
   if not user["password"] == password:
-    return {"error": "Invalid password"}, 401
+    raise InvalidCredentialsError()
 
-  # 通过所有验证后创建新会话
-  try:
-    # 防御会话固定攻击：重置会话ID
-    session.clear()
-    session.permanent = True
+  # user["id"] = str(user["_id"])
 
-    # 存储必要会话信息
-    session['logged_in'] = True
-    session['user_id'] = username
-    session['login_time'] = datetime.now().isoformat()
-    session['ip'] = request.remote_addr  # 绑定IP
-    session['user_agent'] = hashlib.sha256(
-      request.headers.get('User-Agent', '').encode()
-    ).hexdigest()  # 客户端指纹
+  del user["password"]
+  # del user["_id"]
 
-    return {
-      "status": "success",
-      "message": "Login successful",
-      "user": username
-    }, 200
-  except Exception as e:
-    # 记录异常日志
-    current_app.logger.error(f"Login error: {str(e)}")
-    return {
-      "status": "error",
-      "message": "Internal server error3333"
-    }, 500
+  return user
 
 def logout():
   """安全登出"""

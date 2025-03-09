@@ -1,11 +1,14 @@
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from flask import Flask
+from flask import Flask, current_app
+from werkzeug.exceptions import HTTPException
 from flask_cors import CORS
 from flask_session import Session
 from .celery_config import celery_init_app
 from .extensions import extensions
+from .utils.api_response import APIResponse
+from .utils.exceptions import DomainException
 
 from app.blueprint.api import api_bp
 from app.blueprint.views import views_bp
@@ -33,6 +36,35 @@ def register_logging(app):
 
 def create_app(test_confg=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
+
+  @app.errorhandler(Exception)
+  def handle_domain_exception(e: Exception):
+    if isinstance(e, HTTPException):
+      return APIResponse.error(
+        http_status=e.code,
+        biz_code=f"HTTP_{e.code}",
+        message=str(e.description)
+      )
+
+    if isinstance(e, DomainException):
+      return APIResponse.error(
+        http_status=e.http_status,
+        biz_code=e.biz_code,
+        message=str(e)
+      )
+
+    logging.exception("系统未捕获错误")  # 记录详细堆栈
+
+    # 根据环境显示错误详情
+    message = "服务器内部错误"
+    if current_app.config.get("DEBUG"):
+      message = f"{type(e).__name__}: {str(e)}"
+
+    return APIResponse.error(
+      http_status=500,
+      biz_code="SYSTEM_500",
+      message=message
+    )
 
   CORS(app, resources=r'/api/*')
 
