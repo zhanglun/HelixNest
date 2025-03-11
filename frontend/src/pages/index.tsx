@@ -6,6 +6,7 @@ import { Button, Input } from "@heroui/react";
 export default function IndexPage() {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState<any>({});
+  const [taskId, setTaskId] = useState("")
   function getCompoundList() {
     request.get("/compounds").then(({ data }) => {
       console.log(data);
@@ -32,6 +33,7 @@ export default function IndexPage() {
       })
       .then(({ data }) => {
         console.log(data);
+        setTaskId(data.task_id)
       });
   }
 
@@ -65,6 +67,9 @@ export default function IndexPage() {
           <Button onPress={() => startAnalysis(result.pubchem_cid)}>
             Start analysis
           </Button>
+        </div>
+        <div>
+          {taskId}
         </div>
       </div>
     </DefaultLayout>
