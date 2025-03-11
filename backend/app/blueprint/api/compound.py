@@ -4,8 +4,7 @@ from celery.result import AsyncResult
 
 import app.services.pubchem_client as pubchem_client
 from app.utils.api_response import APIResponse
-from app.tasks.compound_tasks import add_together
-from app.tasks.compound_tasks import chem_analysis
+from app.tasks.compound_tasks import fetch_and_analyze_compound
 
 compound_bp = Blueprint("compound", __name__, url_prefix="/compounds")
 
@@ -48,18 +47,9 @@ def analysis():
     return jsonify({'error': 'Invalid chemical identifier'}), 400
 
   # 启动异步任务
-  task = chem_analysis.delay(chemical)
+  task = fetch_and_analyze_compound.delay(chemical)
 
   return jsonify({"task_id": task.id}), 202
-
-@compound_bp.route("/add", methods=["POST"])
-def start_add() -> dict[str, object]:
-  a = request.form.get("a", type=int)
-  b = request.form.get("b", type=int)
-
-  result = add_together.delay(a, b)
-
-  return {"result_id": result.id}
 
 @compound_bp.get('/task-status/<task_id>')
 def get_task_status(task_id):

@@ -1,13 +1,9 @@
-import time
 import requests
-from celery import shared_task
-from flask import current_app
-from app.services.pubchem_client import fetch_compound
+from bson.objectid import ObjectId
+from celery import chain, group, shared_task
+from .pubchem_client import fetch_pubchem_data
+from .rdkit_processor import calculate_descriptors
 from app.models.compound import CompoundModel
-
-@shared_task(ignore_result=False)
-def add_together(a: int, b: int) -> int:
-  return a + b
 
 @shared_task(
   bind=True,
@@ -15,42 +11,54 @@ def add_together(a: int, b: int) -> int:
   max_retries=3,
   retry_backoff=30
 )
-def chem_analysis(self, chemical_identifier):
-  try:
-    # 阶段1：数据获取
-    self.update_state(state='PROGRESS', meta={'progress': 30})
-    data = fetch_compound(chemical_identifier)
-    print('data', data)
+def fetch_and_analyze_compound(self, cid):
+  pipeline = (
+    fetch_pubchem_data.s(cid)
+    | process_raw_data.s()
+    | store_to_mongodb.s()
+  )
 
-    with current_app.app_context():  # 手动激活应用上下文
-      cm = CompoundModel();
-      cm.save_compound(data)
+  return pipeline()
 
-    # 阶段2：数据存储
-    self.update_state(state='PROGRESS', meta={'progress': 70})
-    # compound = Compound(**data).save()
-    time.sleep(10)
+@shared_task()
+def process_raw_data(self, raw_data):
+  # doc = {
+  #   "pubchem_cid": raw_data["pubchem_cid"],
+  #   "meta": {
+  #     "formula": raw_data.get("molecular_formula"),
+  #     "weight": raw_data.get("molecular_weight")
+  #   },
+  #   "raw_data": raw_data.get("pubchem_data")
+  # }
+  self.update_state(state='PROGRESS', meta={'progress': 40})
 
-    # 阶段3：附加计算（示例）
-    self.update_state(state='PROGRESS', meta={'progress': 90})
-    time.sleep(10)
+  return raw_data
 
-    # calc_result = do_molecular_calculation(data['smiles'])
+@shared_task()
+def store_to_mongodb(self, data):
+  print("data", data)
+  cm = CompoundModel();
+  doc_id = cm.collection.insert_one(data).inserted_id
 
-    # return {'cid': cid, 'calc': calc_result}
-    analysis_result = data | {
-      'cid': chemical_identifier,
-      'analysis_status': 'success'
-    }
+  self.update_state(state='PROGRESS', meta={'progress': 60})
 
-    return analysis_result
-  except requests.exceptions.RequestException as e:
-    # 触发 Celery 自动重试（根据装饰器设置）
-    raise self.retry(exc=e)
-  except Exception as e:
-    # 不可重试的错误
-    return {
-      'error': str(e),
-      'chemical': chemical_identifier,
-      'analysis_status': 'failed'
-    }
+  return str(doc_id)
+
+
+
+@shared_task()
+def post_storage_analysis(self, doc_id):
+  cm = CompoundModel()
+  doc = cm.collection.find({"_id": ObjectId(doc_id)})
+
+  self.update_state(state='PROGRESS', meta={'progress': 80})
+  analysis_result = calculate_descriptors(doc['canonical_smiles'])
+
+  cm.collection.update_one(
+    { "_id": ObjectId(doc_id)},
+    { "$set": {
+      "analysis": analysis_result
+    }}
+  )
+  self.update_state(state='PROGRESS', meta={'progress': 100})
+

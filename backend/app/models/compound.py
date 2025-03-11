@@ -35,3 +35,30 @@ class CompoundModel:
       import traceback
       traceback.print_exc()
       raise
+
+  def get_compound(self, pubchem_cid):
+    """
+    Retrieve a compound from the database using its PubChem CID.
+
+    Args:
+        pubchem_cid (str): The PubChem compound ID.
+
+    Returns:
+        pymongo.cursor.Cursor: A cursor to the documents matching the given PubChem CID.
+
+    Raises:
+        Exception: If there's an error in the MongoDB operation.
+    """
+
+    try:
+      result = self.collection.find({
+        "pubchem_cid": pubchem_cid
+      })
+
+      return result
+    except Exception as e:
+      print(e)
+      current_app.logger.error(f"MongoDB operation failed: {str(e)}")
+      import traceback
+      traceback.print_exc()
+      raise

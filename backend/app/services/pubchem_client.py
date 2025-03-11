@@ -73,6 +73,8 @@ def fetch_compound(cid: str) -> dict:
                                     or (result['other_smiles'][0] if result['other_smiles'] else None)
 
     return result
+  except requests.HTTPError as e:
+    raise e
   except RequestException as e:
     current_app.logger.error("cid", type(cid))
     raise RemoteServiceError()
