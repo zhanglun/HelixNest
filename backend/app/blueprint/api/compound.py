@@ -11,6 +11,12 @@ compound_bp = Blueprint("compound", __name__, url_prefix="/compounds")
 
 @compound_bp.route("", methods=["GET"])
 def list():
+  """
+  Get a list of all compounds in the database.
+
+  Returns:
+    APIResponse: a successful response with a list of all compounds.
+  """
   list = pubchem_client.list_compounds()
 
   print(list)
@@ -19,6 +25,13 @@ def list():
 
 @compound_bp.route("/query", methods=["GET"])
 def fetch():
+  """
+  Fetch a compound from the database.
+
+  Returns:
+    APIResponse: a successful response with the compound data.
+  """
+
   cid = request.args.get("cid")
 
   return pubchem_client.fetch_compound(cid)

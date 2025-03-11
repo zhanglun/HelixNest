@@ -1,6 +1,7 @@
 import requests
 from flask import current_app
 from requests.exceptions import RequestException
+from app.utils.exceptions import RemoteServiceError
 
 def fetch_compound(cid: str) -> dict:
   current_app.logger.info("cid", type(cid))
@@ -73,8 +74,8 @@ def fetch_compound(cid: str) -> dict:
 
     return result
   except RequestException as e:
-    print(f"PubChem请求失败: {str(e)}")
-    return None
+    current_app.logger.error("cid", type(cid))
+    raise RemoteServiceError()
 
 
 def list_compounds() -> list:

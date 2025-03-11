@@ -31,3 +31,12 @@ class UserNotActiveError(DomainException):
       biz_code = "AUTH_002",
       http_status = 403
     )
+
+
+class RemoteServiceError(DomainException):
+  def __init__(self,):
+    super().__init__(
+      message = "Remote service error",
+      biz_code = "REMOTE_SERVICE_001",
+      http_status = 200
+    )
