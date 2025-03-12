@@ -49,7 +49,8 @@ def analysis():
   # 启动异步任务
   task = fetch_and_analyze_compound.delay(chemical)
 
-  return jsonify({"task_id": task.id}), 202
+  return APIResponse.success(data={"task_id": task.id})
+
 
 @compound_bp.get('/task-status/<task_id>')
 def get_task_status(task_id):
@@ -60,5 +61,3 @@ def get_task_status(task_id):
     "status": task.status,
     "result": task.result if task.ready() else None
   })
-
-
