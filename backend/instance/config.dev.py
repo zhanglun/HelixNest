@@ -4,7 +4,12 @@ MONGO_URI = "mongodb+srv://admin:qwer1234@cluster0.qmmfo.mongodb.net/?retryWrite
 MONGO_DATABASE_NAME = "helix"
 
 CELERY_BROKER_URL=os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
+# CELERY_RESULT_BACKEND=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
+CELERY_RESULT_BACKEND=os.getenv("CELERY_RESULT_BACKEND", "mongodb+srv://admin:qwer1234@cluster0.qmmfo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+CELERY_MONGODB_BACKEND_SETTINGS={
+  'database': 'helix',
+  'taskmeta_collection': 'celery_tasks',
+}
 
 SECRET_KEY = "secret helix go go"
 SESSION_TYPE = 'redis'

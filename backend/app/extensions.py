@@ -22,6 +22,7 @@ class Extensions:
     """初始化Celery"""
     self.celery = Celery(app.name, task_cls=FlaskTask, broker_url = app.config['CELERY_BROKER_URL'],
       backend = app.config['CELERY_RESULT_BACKEND'],
+      mongodb_backend_settings = app.config['CELERY_MONGODB_BACKEND_SETTINGS'],
       task_serializer = 'json',
       result_serializer = 'json',
       accept_content = ['json'],
