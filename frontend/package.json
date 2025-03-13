@@ -17,6 +17,7 @@
     "@heroui/kbd": "2.2.10",
     "@heroui/link": "2.2.11",
     "@heroui/navbar": "2.2.12",
+    "@heroui/react": "^2.7.5",
     "@heroui/snippet": "2.2.14",
     "@heroui/switch": "2.2.12",
     "@heroui/system": "2.4.10",
@@ -55,5 +56,10 @@
     "typescript": "5.6.3",
     "vite": "^5.2.0",
     "vite-tsconfig-paths": "^4.3.2"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "@heroui/shared-utils"
+    ]
   }
 }

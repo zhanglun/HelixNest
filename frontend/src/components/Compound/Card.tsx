@@ -8,6 +8,7 @@ export const CompoundCard = (props: any) => {
     pubchem_cid,
     canonical_smiles,
     created_at,
+    updated_at,
     isomeric_smiles,
     iupac_name,
     molecular_formula,
@@ -15,6 +16,13 @@ export const CompoundCard = (props: any) => {
   } = props.data;
 
   const [img, setImg] = useState("");
+
+  function updateProgress(task_id: string) {
+    request.get(`/compounds/task-status/${task_id}`).then((data) => {
+      const result = data.data;
+      console.log("Current Step:", result);
+    });
+  }
 
   function startAnalysis(cid: number) {
     request
@@ -61,6 +69,9 @@ export const CompoundCard = (props: any) => {
           >
             re analysis
           </Button>
+          <div>
+            last analysis: {new Date(updated_at).toLocaleString("zh-CN")}
+          </div>
         </div>
       </div>
     </div>

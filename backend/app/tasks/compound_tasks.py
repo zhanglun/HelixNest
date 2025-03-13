@@ -2,7 +2,7 @@ from datetime import datetime
 import requests
 from pymongo.collection import ReturnDocument
 from bson.objectid import ObjectId
-from celery import chain, group, shared_task
+from celery import shared_task
 from .pubchem_client import fetch_pubchem_data
 from .rdkit_processor import calculate_descriptors
 from app.models.compound import CompoundModel
