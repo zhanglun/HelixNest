@@ -1,4 +1,4 @@
-from celery import Celery
+from celery import Celery, Task
 from redis import Redis
 from flask import g
 from flask_session import Session
@@ -14,8 +14,13 @@ class Extensions:
     self.mongo = None
 
   def init_celery(self, app):
+    class FlaskTask(Task):
+      def __call__(self, *args: object, **kwargs: object) -> object:
+        with app.app_context():
+          return self.run(*args, **kwargs)
+
     """初始化Celery"""
-    self.celery = Celery(app.import_name, broker_url = app.config['CELERY_BROKER_URL'],
+    self.celery = Celery(app.name, task_cls=FlaskTask, broker_url = app.config['CELERY_BROKER_URL'],
       backend = app.config['CELERY_RESULT_BACKEND'],
       task_serializer = 'json',
       result_serializer = 'json',
@@ -24,13 +29,9 @@ class Extensions:
       enable_utc = True
     )
 
-    # 确保任务在应用上下文中执行
-    class ContextTask(self.celery.Task):
-      def __call__(self, *args, **kwargs):
-        with app.app_context():
-          return self.run(*args, **kwargs)
+    self.celery.set_default()
 
-    self.celery.Task = ContextTask
+    app.extensions['celery'] = self.celery
 
   def init_mongo(self, app):
     if not app.config.get("MONGO_URI"):

@@ -13,7 +13,7 @@ def calculate_descriptors(smiles):
     'mol_weight': Descriptors.MolWt(mol),
     'tpsa': Descriptors.TPSA(mol),
     'morgan_fp': AllChem.GetMorganFingerprintAsBitVect(mol, 2).ToBitString(),
-    "fps": Chem.RDKFingerprint(mol)
+    # "fps": Chem.RDKFingerprint(mol)
   }
 
   return descriptor_map

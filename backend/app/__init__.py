@@ -100,7 +100,7 @@ def create_app(test_confg=None) -> Flask:
   with app.app_context():
     _init_extensions(app)
 
-  celery_init_app(app)
+  # celery_init_app(app)
 
   return app
 
