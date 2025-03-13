@@ -1,6 +1,6 @@
 from flask import Blueprint, request, session
-from app.services.auth import login_user
-from app.utils.api_response import format_response, APIResponse
+from app.services.auth import login_user, get_login_user
+from app.utils.api_response import  APIResponse
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/")
 
@@ -38,10 +38,8 @@ def login():
 
 @auth_bp.route('/current_user', methods=["GET"])
 def current_user():
-  user_id = session.get("user_id")
+  user = get_login_user()
 
   return APIResponse.success(
-    data={
-      "id": user_id
-    }
+    data=user
   )

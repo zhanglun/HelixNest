@@ -62,4 +62,4 @@ def format_response(func):
 
 
 def generate_request_id():
-  return f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex}"
+  return f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{uuid.uuid4().hex}"

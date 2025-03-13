@@ -46,7 +46,7 @@ def register_logging(app):
   if not app.debug:
     app.logger.addHandler(file_handler)
 
-def create_app(test_confg=None) -> Flask:
+def create_app(test_config=None) -> Flask:
   app = Flask(__name__, instance_relative_config=True)
 
   app.json_provider_class = MongoJSONProvider
@@ -99,8 +99,6 @@ def create_app(test_confg=None) -> Flask:
   # 按需初始化扩展
   with app.app_context():
     _init_extensions(app)
-
-  # celery_init_app(app)
 
   return app
 
