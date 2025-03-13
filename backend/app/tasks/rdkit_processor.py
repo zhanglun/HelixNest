@@ -18,3 +18,8 @@ def calculate_descriptors(smiles):
   }
 
   return descriptor_map
+
+def compare_structures(pdb_smiles: str, pubchem_smiles: str) -> bool:
+    mol1 = Chem.MolFromSmiles(pdb_smiles)
+    mol2 = Chem.MolFromSmiles(pubchem_smiles)
+    return Chem.CanonicalRankedSmiles([mol1, mol2])[0] == 0

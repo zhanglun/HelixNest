@@ -3,7 +3,7 @@ import requests
 from pymongo.collection import ReturnDocument
 from bson.objectid import ObjectId
 from celery import shared_task
-from .pubchem_client import fetch_pubchem_data
+from .pubchem_client import fetch_pubchem_data, fetch_pdb_by_inchikey
 from .rdkit_processor import calculate_descriptors
 from app.models.compound import CompoundModel
 
@@ -17,6 +17,7 @@ def fetch_and_analyze_compound(self, cid):
   pipeline = (
     fetch_pubchem_data.s(cid)
     | process_raw_data.s()
+    | fetch_pdb.s()
     | store_to_mongodb.s()
     | post_storage_analysis.s()
   )
@@ -36,6 +37,18 @@ def process_raw_data(self, raw_data):
   self.update_state(state='PROGRESS', meta={'progress': 40})
 
   return raw_data
+
+@shared_task(bind=True)
+def fetch_pdb(self, data):
+  inchi_key = data['inchi_key']
+
+  if inchi_key is not None:
+    pdb_data = fetch_pdb_by_inchikey(inchi_key)
+    print("pdb_data ====> ", pdb_data)
+    # data['pdb_data'] = pdb_data
+
+  return data
+
 
 @shared_task(bind=True)
 def store_to_mongodb(self, data):
@@ -65,6 +78,7 @@ def store_to_mongodb(self, data):
       {
         "pubchem_cid": data["pubchem_cid"],
         "iupac_name": data["iupac_name"],
+        "inchi_key": data["inchi_key"],
         "molecular_formula": data["molecular_formula"],
         "molecular_weight": data["molecular_weight"],
         "canonical_smiles": data["canonical_smiles"],

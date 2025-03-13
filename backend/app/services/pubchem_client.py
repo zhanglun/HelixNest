@@ -21,6 +21,7 @@ def fetch_compound(cid: str) -> dict:
 
     result = {
       'pubchem_cid': cid,
+      'inchi_key': None,
       'iupac_name': None,
       'molecular_formula': None,
       'molecular_weight': None,
@@ -34,6 +35,9 @@ def fetch_compound(cid: str) -> dict:
       label = urn.get('label', '').lower()
       name = urn.get('name', '').lower()
       value = prop.get('value', {})
+
+      if 'inchikey' in label or 'inchikey' in name:
+        result['inchi_key'] = value.get('sval')
 
       # 处理IUPAC名称
       if 'iupac name' in label or 'iupac name' in name:
@@ -87,3 +91,34 @@ def list_compounds() -> list:
   compounds = db.compounds.find()
 
   return list(compounds)
+
+def fetch_pdb_by_inchikey(inchikey: str) -> dict:
+  url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/{inchikey}/pdb/JSON"
+  query = {
+    "query": {
+      "type": "group",
+      "logical_operator": "and",
+      "nodes": [
+        {
+          "type": "terminal",
+          "service": "text",
+          "parameters": {
+            "attribute": "rcsb_chem_comp_inchikey",
+            "operator": "exact_match",
+            "value": inchikey
+          }
+        }
+      ]
+    },
+    "return_type": "chem_comp"
+  }
+
+  try:
+    resp = requests.get(url, timeout=10)
+    resp.raise_for_status()
+    return resp.json()
+  except requests.HTTPError as e:
+    raise e
+  except RequestException as e:
+    current_app.logger.error("cid", type(inchikey))
+    raise RemoteServiceError()
