@@ -1,9 +1,7 @@
-import time
 import requests
 from celery import shared_task
 from app.services.pubchem_client import fetch_compound, fetch_pdb_by_inchikey
 from app.models.compound import CompoundModel
-
 
 def pubchem_retry_handler(exc):
     if isinstance(exc, requests.HTTPError):
@@ -32,7 +30,7 @@ def fetch_pubchem_data(self, chemical_identifier):
   max_retries=3,
   retry_backoff=30
 )
-def fetch_pdb_by_inchikey(self, chemical_identifier):
+def fetch_pdb_data(self, chemical_identifier):
   try:
     self.update_state(state='PROGRESS', meta={'progress': 20})
 

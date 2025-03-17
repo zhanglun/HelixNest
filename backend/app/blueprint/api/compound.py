@@ -18,8 +18,6 @@ def list():
   """
   list = pubchem_client.list_compounds()
 
-  print(list)
-
   return APIResponse.success(data={"compounds": list})
 
 @compound_bp.route("/query", methods=["GET"])

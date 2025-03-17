@@ -24,6 +24,12 @@ export default function IndexPage() {
     });
   }
 
+  function getLoginUser() {
+    request.get('/auth/current_user').then(({ data }) => {
+      console.log(data);
+    });
+  }
+
   function handleInputEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     const value = (e.target as HTMLInputElement).value;
 
@@ -51,6 +57,7 @@ export default function IndexPage() {
   }
 
   useEffect(() => {
+    getLoginUser();
     getCompoundList();
   }, []);
 

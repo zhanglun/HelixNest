@@ -3,7 +3,7 @@ import requests
 from pymongo.collection import ReturnDocument
 from bson.objectid import ObjectId
 from celery import shared_task
-from .pubchem_client import fetch_pubchem_data, fetch_pdb_by_inchikey
+from .pubchem_client import fetch_pubchem_data, fetch_pdb_data
 from .rdkit_processor import calculate_descriptors
 from app.models.compound import CompoundModel
 
@@ -43,7 +43,7 @@ def fetch_pdb(self, data):
   inchi_key = data['inchi_key']
 
   if inchi_key is not None:
-    pdb_data = fetch_pdb_by_inchikey(inchi_key)
+    pdb_data = fetch_pdb_data(inchi_key)
     print("pdb_data ====> ", pdb_data)
     # data['pdb_data'] = pdb_data
 
