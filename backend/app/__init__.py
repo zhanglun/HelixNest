@@ -5,6 +5,7 @@ from flask import Flask, current_app
 from werkzeug.exceptions import HTTPException
 from flask_cors import CORS
 from flask.json.provider import DefaultJSONProvider
+from flask_socketio import SocketIO
 from bson import ObjectId
 from datetime import datetime
 from .celery_config import celery_init_app
@@ -14,6 +15,8 @@ from .utils.exceptions import DomainException
 
 from app.blueprint.api import api_bp
 from app.blueprint.views import views_bp
+
+socketio = SocketIO()
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 print(basedir)
@@ -99,6 +102,8 @@ def create_app(test_config=None) -> Flask:
   # 按需初始化扩展
   with app.app_context():
     _init_extensions(app)
+
+  socketio.init_app(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
 
   return app
 
