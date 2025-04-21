@@ -112,6 +112,7 @@ def _init_extensions(app):
   extensions.init_mongo(app)
   extensions.init_session(app)
   extensions.init_celery(app)
+  extensions.init_mqtt(app)
 
 def register_blueprint(app):
   app.register_blueprint(views_bp)

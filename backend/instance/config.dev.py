@@ -23,3 +23,9 @@ PERMANENT_SESSION_LIFETIME = 1800  # 30分钟过期
 
 FLASK_PORT = 5000
 
+# MQTT Configuration
+MQTT_BROKER = os.getenv('MQTT_BROKER', 'localhost')
+MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
+MQTT_USERNAME = os.getenv('MQTT_USERNAME', '')
+MQTT_PASSWORD = os.getenv('MQTT_PASSWORD', '')
+MQTT_KEEPALIVE = int(os.getenv('MQTT_KEEPALIVE', 60))

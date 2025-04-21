@@ -5,6 +5,7 @@ from flask_session import Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from .utils.api_response import generate_request_id
+from .services.mqtt_client import mqtt_client
 
 class Extensions:
   """集中管理所有第三方扩展"""
@@ -61,6 +62,12 @@ class Extensions:
     print(app.config['SESSION_REDIS'].ping())
 
     Session(app)
+
+  def init_mqtt(self, app):
+    """初始化MQTT客户端"""
+    # 已经在mqtt_client.py中自动初始化
+    app.extensions['mqtt'] = mqtt_client
+    print("MQTT client initialized")
 
   def register_request_hooks(self, app):
     @app.before_request
